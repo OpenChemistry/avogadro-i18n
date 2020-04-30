@@ -33,8 +33,8 @@ jobs:
       - name: Get Launchpad Translations
         run: |
           bzr branch lp:~geoffh-pitt/avogadro/trunk-translations
-          cp -p trunk-translations/i18n/avogadro openchemistry/avogadroapp/i18n
-          cp -p trunk-translations/i18n/libavogadro openchemistry/avogadrolibs/i18n
+          cp -p trunk-translations/i18n/avogadro/*.po openchemistry/avogadroapp/i18n
+          cp -p trunk-translations/i18n/libavogadro/*.po openchemistry/avogadrolibs/i18n
 
       - name: Debug file layout
         run: echo `ls -d *`
