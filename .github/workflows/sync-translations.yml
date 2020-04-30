@@ -42,6 +42,9 @@ jobs:
       - name: Update avogadrolibs QM files
         run: |
           PROJECT=avogadrolibs
+          ls openchemistry/avogadrolibs 
+          cd openchemistry/avogadrolibs/i18n
+
           # generate the TS files from the PO files
           echo "Generating TS"
           for file in *.po; do
@@ -58,7 +61,6 @@ jobs:
           done
           echo `ls *.qm`
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
-        working-directory: ${{ runner.workspace }}/openchemistry/avogadrolibs/i18n
 
       - name: Update avogadroapp QM files
         run: |
