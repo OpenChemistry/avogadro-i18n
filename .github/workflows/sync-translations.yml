@@ -33,6 +33,7 @@ jobs:
       - name: Get Launchpad Translations
         run: |
           bzr branch lp:~geoffh-pitt/avogadro/trunk-translations
+          ls trunk-translations/i18n/*/*.po
           cp -p trunk-translations/i18n/avogadro/*.po openchemistry/avogadroapp/i18n
           cp -p trunk-translations/i18n/libavogadro/*.po openchemistry/avogadrolibs/i18n
 
@@ -42,8 +43,9 @@ jobs:
       - name: Update avogadrolibs QM files
         run: |
           PROJECT=avogadrolibs
-          ls openchemistry/avogadrolibs 
+          ls openchemistry/avogadrolibs
           cd openchemistry/avogadrolibs/i18n
+          echo PO=`ls *.po`
 
           # generate the TS files from the PO files
           echo "Generating TS"
