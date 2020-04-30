@@ -36,6 +36,9 @@ jobs:
           cp -p trunk-translations/i18n/avogadro openchemistry/avogadroapp/i18n
           cp -p trunk-translations/i18n/libavogadro openchemistry/avogadrolibs/i18n
 
+      - name: Debug file layout
+        run: echo `ls -d *`
+
       - name: Update avogadrolibs QM files
         run: |
           PROJECT=avogadrolibs
@@ -75,7 +78,7 @@ jobs:
         with:
           commit_message: Apply automatic translations
           commit_options: '--no-verify --signoff'
-          file_pattern: */*.qm
+          file_pattern: '*/*.qm'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2-preview
