@@ -27,7 +27,7 @@ jobs:
       - name: Checkout avogadrolibs
         uses: actions/checkout@v2
         with:
-          repository: openchemistry/avogrolibs
+          repository: openchemistry/avogadrolibs
           path: openchemistry/avogadrolibs
 
       - name: Get Launchpad Translations
