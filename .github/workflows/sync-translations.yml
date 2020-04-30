@@ -1,0 +1,94 @@
+name: Sync Translations
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # run every Sunday at 00:42
+    - cron:  '42 0 * * *'
+
+jobs:
+  sync-translations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Dependencies
+        run: sudo apt-get -qq install bzr gettext qt5-default qttools5-dev-tools
+
+      - name: Checkout current repo
+        uses: actions/checkout@v2
+
+      - name: Checkout avogadroapp
+        uses: actions/checkout@v2
+        with:
+          repository: openchemistry/avogadroapp
+          path: openchemistry/avogadroapp
+
+      - name: Checkout avogadrolibs
+        uses: actions/checkout@v2
+        with:
+          repository: openchemistry/avogadrolibs
+          path: openchemistry/avogadrolibs
+
+      - name: Get Launchpad Translations
+        run: |
+          bzr branch lp:~geoffh-pitt/avogadro/trunk-translations
+          ls trunk-translations/i18n/*/*.po
+          cp -p trunk-translations/i18n/avogadro/*.po openchemistry/avogadroapp/i18n
+          cp -p trunk-translations/i18n/libavogadro/*.po openchemistry/avogadrolibs/i18n
+
+      - name: Debug file layout
+        run: echo `ls -d *`
+
+      - name: Update avogadrolibs QM files
+        run: |
+          PROJECT=avogadrolibs
+          cd openchemistry/avogadrolibs/i18n
+
+          # generate the TS files from the PO files
+          echo "Generating TS"
+          for file in *.po; do
+            lconvert -locations none $file -o ${file%%.po}.ts;
+          done;
+          # generate the QM files from TS files
+          echo "Generating QM"
+          lrelease -compress -removeidentical *.ts
+          # don't keep the TS anymore
+          rm *.ts
+          echo "Renaming QM"
+          for file in *.qm; do
+            mv ${file} ${PROJECT}-${file};
+          done
+          echo `ls *.qm`
+          mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
+
+      - name: Update avogadroapp QM files
+        run: |
+          PROJECT=avogadroapp
+          cd openchemistry/avogadroapp/i18n
+
+          # generate the TS files from the PO files
+          for file in *.po; do
+            lconvert -locations none $file -o ${file%%.po}.ts;
+          done;
+          # generate the QM files from TS files
+          lrelease -compress -removeidentical *.ts
+          # don't keep the TS anymore
+          rm *.ts
+          for file in *.qm; do
+            mv ${file} ${PROJECT}-${file};
+          done
+          mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
+
+      - name: Update git repo
+        uses: stefanzweifel/git-auto-commit-action@v4.1.6
+        with:
+          commit_message: Apply automatic translations
+          commit_options: '--no-verify --signoff'
+          file_pattern: '*/*.qm'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2-preview
+        with:
+          path: ${{ runner.workspace }}/*/*.qm
+          name: AvoI18n
