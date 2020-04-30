@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Dependencies
-        run: sudo apt-get -qq install bzr gettext qttools5-dev-tools
+        run: sudo apt-get -qq install bzr gettext qt5-default qttools5-dev-tools
 
       - name: Checkout current repo
         uses: actions/checkout@v2
@@ -43,9 +43,7 @@ jobs:
       - name: Update avogadrolibs QM files
         run: |
           PROJECT=avogadrolibs
-          ls openchemistry/avogadrolibs
           cd openchemistry/avogadrolibs/i18n
-          echo PO=`ls *.po`
 
           # generate the TS files from the PO files
           echo "Generating TS"
@@ -67,6 +65,8 @@ jobs:
       - name: Update avogadroapp QM files
         run: |
           PROJECT=avogadroapp
+          cd openchemistry/avogadroapp/i18n
+
           # generate the TS files from the PO files
           for file in *.po; do
             lconvert -locations none $file -o ${file%%.po}.ts;
@@ -79,7 +79,6 @@ jobs:
             mv ${file} ${PROJECT}-${file};
           done
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
-        working-directory: ${{ runner.workspace }}/openchemistry/avogadrolibs/i18n
 
       - name: Update git repo
         uses: stefanzweifel/git-auto-commit-action@v4.1.6
