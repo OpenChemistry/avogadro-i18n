@@ -43,16 +43,20 @@ jobs:
         run: |
           PROJECT=avogadrolibs
           # generate the TS files from the PO files
+          echo "Generating TS"
           for file in *.po; do
             lconvert -locations none $file -o ${file%%.po}.ts;
           done;
           # generate the QM files from TS files
+          echo "Generating QM"
           lrelease -compress -removeidentical *.ts
           # don't keep the TS anymore
           rm *.ts
+          echo "Renaming QM"
           for file in *.qm; do
             mv ${file} ${PROJECT}-${file};
           done
+          echo `ls *.qm`
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
         working-directory: ${{ runner.workspace }}/openchemistry/avogadrolibs/i18n
 
