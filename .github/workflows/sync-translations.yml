@@ -53,7 +53,7 @@ jobs:
           for file in *.qm; do
             mv ${file} ${PROJECT}-${file};
           done
-          mv *.qm ${GITHUB_WORKSPACE}/avogadro-i18n/${PROJECT}
+          mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
         working-directory: ${{ runner.workspace }}/openchemistry/avogadrolibs/i18n
 
       - name: Update avogadroapp QM files
@@ -70,7 +70,7 @@ jobs:
           for file in *.qm; do
             mv ${file} ${PROJECT}-${file};
           done
-          mv *.qm ${GITHUB_WORKSPACE}/avogadro-i18n/${PROJECT}
+          mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
         working-directory: ${{ runner.workspace }}/openchemistry/avogadrolibs/i18n
 
       - name: Update git repo
@@ -83,5 +83,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2-preview
         with:
-          path: ${{ runner.workspace }}/avogadro-i18n/*/*.qm
+          path: ${{ runner.workspace }}/*/*.qm
           name: AvoI18n
