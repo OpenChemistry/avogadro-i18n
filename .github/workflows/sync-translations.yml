@@ -81,11 +81,12 @@ jobs:
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
 
       - name: Update git repo
-        uses: stefanzweifel/git-auto-commit-action@v4.1.6
+        uses: EndBug/add-and-commit@v4
         with:
-          commit_message: Apply automatic translations
-          commit_options: '--no-verify --signoff'
-          file_pattern: '*/*.qm'
+          message: Apply automatic translations
+          add: '*/*.qm'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2-preview
