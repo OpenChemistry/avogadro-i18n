@@ -2,7 +2,7 @@
 
 Translations for the Avogadro app and libraries
 
-Contributions and edits are welcome through [Weblate](https://hosted.weblate.org/projects/avogadro/)
+Contributions and edits are always welcome through [Weblate](https://hosted.weblate.org/engage/avogadro/)
 
 Current Status:
 
