@@ -1,0 +1,7 @@
+{
+  "author": "Avogadro Translator Team",
+  "name": "avogadro-i18n",
+  "url": "https://github.com/openchemistry/avogadro-i18n",
+  "description": "Translations and localizations for Avogadro interface text.",
+  "type": "i18n"
+}
