@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Dependencies
-        run: sudo apt-get -qq install bzr gettext qt5-default qttools5-dev-tools
+        run: sudo apt-get -qq install gettext qt5-default qttools5-dev-tools
 
       - name: Checkout current repo
         uses: actions/checkout@v2
@@ -30,20 +30,15 @@ jobs:
           repository: openchemistry/avogadrolibs
           path: openchemistry/avogadrolibs
 
-      - name: Get Launchpad Translations
-        run: |
-          bzr branch lp:~geoffh-pitt/avogadro/trunk-translations
-          ls trunk-translations/i18n/*/*.po
-          cp -p trunk-translations/i18n/avogadro/*.po openchemistry/avogadroapp/i18n
-          cp -p trunk-translations/i18n/libavogadro/*.po openchemistry/avogadrolibs/i18n
-
       - name: Debug file layout
-        run: echo `ls -d *`
+        run: |
+          echo `pwd`
+          echo `ls -d *`
 
       - name: Update avogadrolibs QM files
         run: |
           PROJECT=avogadrolibs
-          cd openchemistry/avogadrolibs/i18n
+          cd openchemistry/${PROJECT}/i18n
 
           # generate the TS files from the PO files
           echo "Generating TS"
@@ -60,12 +55,14 @@ jobs:
             mv ${file} ${PROJECT}-${file};
           done
           echo `ls *.qm`
+          echo ${GITHUB_WORKSPACE}/${PROJECT}
+          echo `ls ${GITHUB_WORKSPACE}/${PROJECT}`
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
 
       - name: Update avogadroapp QM files
         run: |
           PROJECT=avogadroapp
-          cd openchemistry/avogadroapp/i18n
+          cd openchemistry/${PROJECT}/i18n
 
           # generate the TS files from the PO files
           for file in *.po; do
@@ -81,15 +78,16 @@ jobs:
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
 
       - name: Update git repo
-        uses: EndBug/add-and-commit@v4
+        uses: EndBug/add-and-commit@v7
         with:
+          default_author: github_actions
           message: Apply automatic translations
           add: '*/*.qm'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2-preview
+        uses: actions/upload-artifact@v2
         with:
           path: ${{ runner.workspace }}/*/*.qm
           name: AvoI18n
