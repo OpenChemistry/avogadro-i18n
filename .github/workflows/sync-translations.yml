@@ -13,7 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Dependencies
-        run: sudo apt-get -qq install gettext qt5-default qttools5-dev-tools
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -qq install gettext qt5-default qttools5-dev-tools
 
       - name: Checkout current repo
         uses: actions/checkout@v2
