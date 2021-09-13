@@ -70,7 +70,7 @@ jobs:
 
           # generate the TS files from the PO files
           for file in *.po; do
-            lconvert none $file -o ${file%%.po}.ts;
+            lconvert $file -o ${file%%.po}.ts;
           done;
           echo "updating TS"
           for file in *.ts; do
