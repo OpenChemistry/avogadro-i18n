@@ -50,6 +50,7 @@ jobs:
           echo "updating TS"
           for file in *.ts; do
             lupdate .. -ts $file
+          done;
           # generate the QM files from TS files
           echo "Generating QM"
           lrelease -compress -removeidentical *.ts
