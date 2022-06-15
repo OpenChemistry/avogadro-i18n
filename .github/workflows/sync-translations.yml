@@ -1,6 +1,7 @@
 name: Sync Translations
 
 on:
+  workflow_dispatch:
   push:
   pull_request:
   schedule:
