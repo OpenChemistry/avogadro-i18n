@@ -19,16 +19,16 @@ jobs:
           sudo apt-get -qq install gettext qttools5-dev-tools
 
       - name: Checkout current repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
 
       - name: Checkout avogadroapp
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
         with:
           repository: openchemistry/avogadroapp
           path: openchemistry/avogadroapp
 
       - name: Checkout avogadrolibs
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
         with:
           repository: openchemistry/avogadrolibs
           path: openchemistry/avogadrolibs
