@@ -19,16 +19,16 @@ jobs:
           sudo apt-get -qq install gettext qttools5-dev-tools
 
       - name: Checkout current repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Checkout avogadroapp
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           repository: openchemistry/avogadroapp
           path: openchemistry/avogadroapp
 
       - name: Checkout avogadrolibs
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           repository: openchemistry/avogadrolibs
           path: openchemistry/avogadrolibs
@@ -87,7 +87,7 @@ jobs:
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
 
       - name: Update git repo
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
         with:
           default_author: github_actions
           message: Apply automatic translations
@@ -96,7 +96,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           path: ${{ runner.workspace }}/*/*.qm
           name: AvoI18n
