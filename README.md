@@ -7,5 +7,5 @@ Contributions and edits are always welcome through [Weblate](https://hosted.webl
 Current Status:
 
 <a href="https://hosted.weblate.org/engage/avogadro/">
-<img src="https://hosted.weblate.org/widgets/avogadro/multi-auto.svg" alt="Translation status" />
+<img src="https://hosted.weblate.org/widget/avogadro/multi-auto.svg" alt="Translation status" />
 </a>
