@@ -12,11 +12,13 @@ on:
 jobs:
   sync-translations:
     runs-on: ubuntu-latest
+    env:
+      PATH: ${{ env.PATH }}:/usr/lib/qt6/bin
     steps:
       - name: Install Dependencies
         run: |
           sudo apt-get -qq update
-          sudo apt-get -qq install gettext qttools5-dev-tools
+          sudo apt-get -qq install gettext qt6-l10n-tools
 
       - name: Checkout current repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -46,12 +48,12 @@ jobs:
           # generate the TS files from the PO files
           echo "Generating TS"
           for file in *.po; do
-            lconvert $file -o ${file%%.po}.ts;
-          done;
+            lconvert $file -o ${file%.po}.ts
+          done
           echo "updating TS"
           for file in *.ts; do
             lupdate .. -ts $file
-          done;
+          done
           # generate the QM files from TS files
           echo "Generating QM"
           lrelease -compress -removeidentical *.ts
@@ -59,7 +61,7 @@ jobs:
           rm *.ts
           echo "Renaming QM"
           for file in *.qm; do
-            mv ${file} ${PROJECT}-${file};
+            mv ${file} ${PROJECT}-${file}
           done
           echo `ls *.qm`
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
@@ -71,18 +73,18 @@ jobs:
 
           # generate the TS files from the PO files
           for file in *.po; do
-            lconvert $file -o ${file%%.po}.ts;
-          done;
+            lconvert $file -o ${file%.po}.ts
+          done
           echo "updating TS"
           for file in *.ts; do
             lupdate .. -ts $file
-          done;
+          done
           # generate the QM files from TS files
           lrelease -compress -removeidentical *.ts
           # don't keep the TS anymore
           rm *.ts
           for file in *.qm; do
-            mv ${file} ${PROJECT}-${file};
+            mv ${file} ${PROJECT}-${file}
           done
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
 
