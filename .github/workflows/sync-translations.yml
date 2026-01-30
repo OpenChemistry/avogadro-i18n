@@ -12,8 +12,6 @@ on:
 jobs:
   sync-translations:
     runs-on: ubuntu-latest
-    env:
-      PATH: ${{ env.PATH }}:/usr/lib/qt6/bin
     steps:
       - name: Install Dependencies
         run: |
@@ -48,15 +46,15 @@ jobs:
           # generate the TS files from the PO files
           echo "Generating TS"
           for file in *.po; do
-            lconvert $file -o ${file%.po}.ts
+            /usr/lib/qt6/bin/lconvert $file -o ${file%.po}.ts
           done
           echo "updating TS"
           for file in *.ts; do
-            lupdate .. -ts $file
+            /usr/lib/qt6/bin/lupdate .. -ts $file
           done
           # generate the QM files from TS files
           echo "Generating QM"
-          lrelease -compress -removeidentical *.ts
+          /usr/lib/qt6/bin/lrelease -compress -removeidentical *.ts
           # don't keep the TS anymore
           rm *.ts
           echo "Renaming QM"
@@ -73,14 +71,14 @@ jobs:
 
           # generate the TS files from the PO files
           for file in *.po; do
-            lconvert $file -o ${file%.po}.ts
+            /usr/lib/qt6/bin/lconvert $file -o ${file%.po}.ts
           done
           echo "updating TS"
           for file in *.ts; do
-            lupdate .. -ts $file
+            /usr/lib/qt6/bin/lupdate .. -ts $file
           done
           # generate the QM files from TS files
-          lrelease -compress -removeidentical *.ts
+          /usr/lib/qt6/bin/lrelease -compress -removeidentical *.ts
           # don't keep the TS anymore
           rm *.ts
           for file in *.qm; do
