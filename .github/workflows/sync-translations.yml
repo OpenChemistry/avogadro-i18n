@@ -3,15 +3,19 @@ name: Sync Translations
 on:
   workflow_dispatch:
   push:
-  pull_request:
+    branches: [master]
   schedule:
     # * is a special character in YAML so you have to quote this string
     # run every day at 00:42
     - cron:  '42 0 * * *'
 
+permissions: {}
+
 jobs:
   sync-translations:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Install Dependencies
         run: |
@@ -20,18 +24,22 @@ jobs:
 
       - name: Checkout current repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Checkout avogadroapp
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: openchemistry/avogadroapp
           path: openchemistry/avogadroapp
+          persist-credentials: false
 
       - name: Checkout avogadrolibs
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: openchemistry/avogadrolibs
           path: openchemistry/avogadrolibs
+          persist-credentials: false
 
       - name: Debug file layout
         run: |
@@ -87,11 +95,14 @@ jobs:
           mv *.qm ${GITHUB_WORKSPACE}/${PROJECT}
 
       - name: Update git repo
-        uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
-        with:
-          default_author: github_actions
-          message: Apply automatic translations
-          add: '*/*.qm'
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+          git add '*/*.qm'
+          git diff --staged --quiet || git commit -m "Apply automatic translations"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
